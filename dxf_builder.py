@@ -14,7 +14,7 @@ class DXFBuilder:
         doc.units = units.MM
         msp = doc.modelspace()
 
-        x, y = 0.0, 0.0
+        x = y = 0.0
         angle = 0.0
 
         for elem in data.get("segmenti", []):
@@ -25,11 +25,9 @@ class DXFBuilder:
                 y2 = y + lunghezza * math.sin(rad)
                 msp.add_line((x, y), (x2, y2))
                 x, y = x2, y2
-
             elif elem["tipo"] == "piega":
                 angle += float(elem.get("angolo", 90))
 
-        filename = f"{nome_pezzo}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.dxf"
-        filepath = os.path.join(self.output_dir, filename)
+        filepath = os.path.join(self.output_dir, f"{nome_pezzo}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.dxf")
         doc.saveas(filepath)
         return filepath
